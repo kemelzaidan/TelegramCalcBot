@@ -1,20 +1,48 @@
 'use strict';
+//npm libs
 var math = require('mathjs');
+var request = require('request');
+// request lib options
+const options = {
+  headers: {
+    'Content-type': 'application/json'
+  }
+}
+// telegram api endpoint
+const url = 'https://api.telegram.org/bot439324808:AAEUxvBeHEnnq3UVUPS5CAwQ1is5xXq-kPQ/'
 
+// default callback for requests
+function requestCallback(error, response, body) {
+  if (!error && response.statusCode == 200) {
+    var success = JSON.parse(body);
+    console.log('Request successfull: ', success);
+  }
+  else {
+    console.error('Something went wrong: ', error);
+  }
+}
+// default handler for POST on '/'
 module.exports.calculate = (event, context, callback) => {
-  let body = JSON.parse(event.body);
-  let answer = math.eval(body.expression);
+  callback(null, {statusCode: 200});
 
-  const response = {
-    statusCode: 200,
-    body: JSON.stringify({
-      answer: `${answer}`,
-      //input: event,
-    }),
-  };
+  console.log('Received an update:\n\n', event);
+  
+  let update = event;
+  let message = update.message
+  // let inline_query = update.inline_query
 
-  callback(null, response);
+  if (message.text[0] !== '/') {
+    let answer = math.eval(message.text)
+    console.log('ANSWER: ', answer);
+    
+    const answerMessage = {
+      body: JSON.stringify({
+        chat_id: message.chat.id,
+        text: answer,
+        reply_to_message_id: message.id
+      })
+    }
 
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // callback(null, { message: 'Go Serverless v1.0! Your function executed successfully!', event });
+    request.post(url+'sendMessage', options, requestCallback);
+  }
 };
