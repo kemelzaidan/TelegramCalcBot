@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A simple inline telegram calculator bot",
   "main": "handler.js",
+  "repository": "https://github.com/kemelzaidan/TelegramCalcBot.git",
   "scripts": {
     "test": "sls invoke local -f calculator -p test_data.json"
   },
@@ -16,7 +17,7 @@
   "author": "Kemel Zaidan <kemelzaidan@gmail.com>",
   "license": "GPL-3.0",
   "dependencies": {
-    "mathjs": "^3.15.0",
+    "math-expression-evaluator": "^1.2.17",
     "request": "^2.81.0"
   }
 }

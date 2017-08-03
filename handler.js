@@ -1,6 +1,6 @@
 'use strict';
 //npm libs
-var math = require('mathjs');
+var math = require('math-expression-evaluator');
 var request = require('request');
 
 // telegram api endpoint
@@ -17,8 +17,8 @@ module.exports.calculate = (event, context, callback) => {
   // let inline_query = update.inline_query
 
   if (message.text[0] !== '/') {
-    let answer = math.eval(message.text)
-                     .format();
+
+    let answer = math.eval(message.text);
 
     console.log('ANSWER: ', answer);
 
@@ -35,6 +35,7 @@ module.exports.calculate = (event, context, callback) => {
     }
 
     console.log('Answer Message: ', answerMessage);
+    
     request.post(answerMessage, function (error, response, body) {
 
       if (!error && response.statusCode == 200) {
